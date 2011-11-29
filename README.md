@@ -15,6 +15,12 @@ You can install it with: yaourt or packer -S gnome-shell-system-monitor-applet-g
 
 #### Everywhere else for now:
 
+Dependencies:
+    
+    python3
+    python3-gobject
+    libgtop and gir bindings (gir1.2-gtop-2.0, gir1.2-networkmanager-1.0 on Ubuntu)
+
 Install git if you don't have it: (sudo apt-get install git-core, sudo pacman -S git, etc)
 Then:
 
@@ -24,7 +30,7 @@ Then:
     mkdir -p ~/.local/share/gnome-shell/extensions
     cd ~/.local/share/gnome-shell/extensions
     ln -s ~/git_projects/gnome-shell-system-monitor-applet/system-monitor@paradoxxx.zero.gmail.com
-    cp ~/git_projects/gnome-shell-system-monitor-applet/gnome-shell-system-monitor-config.desktop ~/.local/share/applications/
+    cp ~/git_projects/gnome-shell-system-monitor-applet/system-monitor-applet-config.desktop ~/.local/share/applications/
 
 Then install the schema:
 
