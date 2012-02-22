@@ -273,5 +273,42 @@
       <default>'#ffffff16'</default>
       <summary>Color of background</summary>
     </key>
+	<key name="battery-display" type="b">
+      <default>false</default>
+      <summary>Display battery</summary>
+      <description>Set to false to remove battery display in status bar</description>
+    </key>
+	<key name="battery-refresh-time" type="i">
+      <default>5000</default>
+      <summary>thermal refresh time</summary>
+      <description>Time in ms between 2 refresh of thermal</description>
+    </key>
+    <key name="battery-graph-width" type="i">
+      <default>100</default>
+      <summary>thermal graph width</summary>
+      <description>Graph width in pixel</description>
+    </key>
+	<key name="battery-show-text" type="b">
+      <default>true</default>
+      <summary>Display 'batt'</summary>
+      <description>Set to true to show 'batt' before net display</description>
+    </key>
+	<key name="battery-style" enum="org.gnome.shell.extensions.system-monitor.display-style">
+      <default>'digit'</default>
+      <summary>Choose the display style.</summary>
+    </key>
+	<key name="battery-batt0-color" type="s">
+      <default>'#f2002e'</default>
+      <summary>Color of battery</summary>
+    </key>
+    <key name="battery-time" type="b">
+	  <default>false</default>
+	  <summary>Display battery time remaining rather than percentage</summary>
+	</key>
+    <key name="battery-hidesystem" type="b">
+	  <default>true</default>
+	  <summary>Hide system battery icon</summary>
+	</key>
+
   </schema>
 </schemalist>
