@@ -1146,26 +1146,20 @@ var enable = function () {
             if(isOpen) {
                 Main.__sm.pie.actor.queue_repaint();
                 // There appears to be a big memory leak due to a lack GC when calling actor.get_context()
-                // Until this is fixed, just draw the pie when pulling up the tipbox.
-                //
-                //menu_timeout = Mainloop.timeout_add_seconds(
-                //    1,
-                //    function () {
-                //        Main.__sm.pie.actor.queue_repaint();
-                //        return true;
-                //    });
-            //} else {
-                //Mainloop.source_remove(menu_timeout);
+                // Until this is fixed reduce timer to update less frequently.
+                
+                menu_timeout = Mainloop.timeout_add_seconds(
+                    30,
+                    function () {
+                        Main.__sm.pie.actor.queue_repaint();
+                        return true;
+                    });
+                } else {
+                    Mainloop.source_remove(menu_timeout);
             }
         }
     );
-    let gc_timeout;
-    gc_timeout = Mainloop.timeout_add_seconds(
-        1,
-        function () {
-            global.gc()
-        });
-    
+        
     let _appSys = Shell.AppSystem.get_default();
     let _gsmApp = _appSys.lookup_app('gnome-system-monitor.desktop');
     let _gsmPrefs = _appSys.lookup_app('system-monitor-applet-config.desktop');
@@ -1188,11 +1182,12 @@ var enable = function () {
 };
 
 var disable = function () {
+
     //restore system power icon if necessary
     if (Schema.get_boolean('battery-hidesystem')){    
         Main.__sm.elts.battery._icon_backup.reparent(Main.panel._statusArea.battery.actor);
     }
-    Mainloop.source_remove(menu_timeout);
+
     Schema.run_dispose();
     for (let eltName in Main.__sm.elts) {
         Main.__sm.elts[eltName].destroy();
