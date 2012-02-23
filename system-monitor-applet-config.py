@@ -226,7 +226,6 @@ class SettingFrame:
             item.selector.connect('changed', set_string,
                                   self.schema, key, _slist)
         elif sections[1] == 'time':
-            print("adding battery specifics")
             item = Gtk.CheckButton(label=_('Show Time Remaining'))
             item.set_active(self.schema.get_boolean(key))
             self.hbox3.add(item)

@@ -933,11 +933,15 @@ var init = function (metadata) {
                         battery_found = true;
                         
                         //grab data
+                        if (seconds > 60){
                         let time = Math.round(seconds / 60);
                         let minutes = time % 60;
                         let hours = Math.floor(time / 60);
                         this.percentage = Math.floor(percentage);
                         this.timeString = C_("battery time remaining","%d:%02d").format(hours,minutes);
+                        } else {
+                            this.timeString = '-- ';
+                        }
                         this.icon = icon;
                         this.gicon = Gio.icon_new_for_string(icon);
                     }
@@ -984,7 +988,7 @@ var init = function (metadata) {
         create_text_items: function() {
             return [new St.Icon({ gicon: Gio.icon_new_for_string(this.icon),
                                    icon_type: St.IconType.FULLCOLOR,
-                                   style_class: 'system-status-icon' }),
+                                   style_class: 'sm-status-icon' }),
                     new St.Label({ style_class: "sm-status-value"}),
                     new St.Label({ text: '%', style_class: "sm-unit-label"})];
         },
