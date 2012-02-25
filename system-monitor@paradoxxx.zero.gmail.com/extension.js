@@ -892,24 +892,25 @@ var init = function (metadata) {
         _init: function() {
             this.icon_hidden = false;
             this.percentage = 0;
-            this.timeString = '0:00';
-            this._sysPower = Main.panel._statusArea['battery'];
-            
-            this._proxy = this._sysPower._proxy;
-            this._icon_backup = this._sysPower.actor.get_children()[0];
+            this.timeString = '-- ';
+            this._proxy = Main.panel._statusArea['battery']._proxy;
             this.powerSigID = this._proxy.connect('Changed', Lang.bind(this, this.update_battery));
+           
             //need to specify a default icon, since the contructor completes before UPower callback
             this.icon = '. GThemedIcon battery-good-symbolic battery-good';
             this.gicon = Gio.icon_new_for_string(this.icon);
-            this.update_battery();
+            
 
             this.menu_item = new PopupMenu.PopupMenuItem(_("Battery"), {reactive: false});
+            
             ElementBase.prototype._init.call(this);
             this.tip_format('%');
             
-            this.update();
+            this.update_battery();
             this.update_tips();
             this.hide_system_icon();
+            this.update();
+            
 
             Schema.connect('changed::' + this.elt + '-hidesystem', Lang.bind(this, this.hide_system_icon));
             Schema.connect('changed::' + this.elt + '-time', Lang.bind(this, this.update_tips));
@@ -925,11 +926,11 @@ var init = function (metadata) {
                 if (error) {
                     log("power proxy error: " + error)
                     this.actor.hide()
+                    this.menu_item.actor.hide();
                     return;
                 }
                 devices.forEach(Lang.bind(this, function(result) {
                     let [device_id, device_type, icon, percentage, state, seconds] = result;
-                    
                     if (device_type == Power.UPDeviceType.BATTERY && !battery_found) {
                         battery_found = true;
                         
@@ -947,9 +948,12 @@ var init = function (metadata) {
                         this.gicon = Gio.icon_new_for_string(icon);
                     }
                 }));
+                if (!battery_found) {
+                    this.actor.hide()
+                    this.menu_item.actor.hide();
+                }
+                    
             }));
-            
-
         },
         hide_system_icon: function(override) {
             let value = Schema.get_boolean(this.elt + '-hidesystem');
@@ -989,7 +993,6 @@ var init = function (metadata) {
             } else {
                 displayString = this.percentage.toString()
             }
-
             this.text_items[1].text = this.menu_items[3].text = displayString;
             this.text_items[0].gicon = this.gicon;
             this.vals = [this.percentage];
