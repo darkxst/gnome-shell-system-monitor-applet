@@ -53,6 +53,9 @@ var init = function (metadata) {
         this.text_box.visible = style == 'digit' || style == 'both';
         this.chart.actor.visible = style == 'graph' || style == 'both';
     }
+    function change_menu() {
+        this.menu_item.actor.visible = Schema.get_boolean(this.elt + '-show-menu');
+    }
 
     log("System monitor applet init from " + metadata.path);
     Schema = new Gio.Settings({ schema: 'org.gnome.shell.extensions.system-monitor' });
@@ -335,6 +338,9 @@ var init = function (metadata) {
                                         style_class: "sm-status-label"});
             change_text.call(this);
             Schema.connect('changed::' + this.elt + '-show-text', Lang.bind(this, change_text));
+            
+            change_menu.call(this);
+            Schema.connect('changed::' + this.elt + '-show-menu', Lang.bind(this, change_menu));
 
             this.actor.add_actor(this.label);
             this.text_box = new St.BoxLayout();
