@@ -890,6 +890,7 @@ var init = function (metadata) {
         elt: 'battery',
         color_name: ['batt0'],
         _init: function() {
+            this.icon_hidden = false;
             this.percentage = 0;
             this.timeString = '0:00';
             this._sysPower = Main.panel._statusArea['battery'];
@@ -950,14 +951,24 @@ var init = function (metadata) {
             
 
         },
-        //this is not ideal, currently removes the icon, but not the space that belongs to it.
-        //may need to monkey patch to remove "_devicesChanged()" from power.js 
-        hide_system_icon: function() {
+        hide_system_icon: function(override) {
             let value = Schema.get_boolean(this.elt + '-hidesystem');
+            if (override == false ){
+                value = false;
+            }
             if (value){
-                this._sysPower.actor.remove_actor(this._icon_backup);
-            } else {
-                this._icon_backup.reparent(this._sysPower.actor);
+                for (let Index = 0; Index < Main.panel._rightBox.get_children().length; Index++){
+                    if(Main.panel._statusArea['battery'] == Main.panel._rightBox.get_children()[Index]._delegate){
+                        Main.panel._rightBox.get_children()[Index].destroy();
+                        Main.panel._statusArea['battery'] = null;
+                        this.icon_hidden = true;
+                        break;           
+                    }
+                }
+            } else if(this.icon_hidden){
+                let Indicator = new Panel.STANDARD_STATUS_AREA_SHELL_IMPLEMENTATION['battery'];
+                Main.panel.addToStatusArea('battery', Indicator, Panel.STANDARD_STATUS_AREA_ORDER.indexOf('battery'));
+                this.icon_hidden = false;
             }
         },
         update_tips: function(){
@@ -1188,8 +1199,8 @@ var enable = function () {
 var disable = function () {
 
     //restore system power icon if necessary
-    if (Schema.get_boolean('battery-hidesystem')){    
-        Main.__sm.elts.battery._icon_backup.reparent(Main.panel._statusArea.battery.actor);
+    if (Schema.get_boolean('battery-hidesystem') && Main.__sm.elts.battery.icon_hidden){    
+        Main.__sm.elts.battery.hide_system_icon(false);
     }
 
     Schema.run_dispose();
