@@ -566,6 +566,7 @@ var init = function (metadata) {
         _init: function() {
             this.ifs = [];
             this.client = NMClient.Client.new();
+            this.NMsig = this.client.connect('device-added' , Lang.bind(this, this.add_device_sig()));
             this.update_iface_list();
             
             if(!this.ifs.length){
@@ -635,6 +636,18 @@ var init = function (metadata) {
                     if (iface_list[j].state == NetworkManager.DeviceState.ACTIVATED){
                        this.ifs.push(iface_list[j].get_ip_iface());
                     }
+                }
+            }
+            catch(e) {
+                global.logError("Please install Network Manager Gobject Introspection Bindings");
+            }
+        },
+        add_device_sig: function(){
+                try {
+                let iface_list = this.client.get_devices();
+                this.NMsigID = []
+                for(let j = 0; j < iface_list.length; j++){
+            	    this.NMsigID[j] = iface_list[j].connect('state-changed' , Lang.bind(this, this.update_iface_list));
                 }
             }
             catch(e) {
