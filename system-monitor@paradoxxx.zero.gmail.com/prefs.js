@@ -269,22 +269,16 @@ App.prototype = {
         keys.forEach(Lang.bind(this, function(key){
             if (key == 'icon-display'){
                 let item = new Gtk.CheckButton({label: _('Display Icon')});
-                //item.set_active(Schema.get_boolean(key))
                 this.items.push(item)
                 this.hbox1.add(item)
-                /*item.connect('toggled', function(check){
-                    set_boolean(check, Schema, key);
-                });*/
 				Settings.bind(key, item, 'active', Gio.SettingsBindFlags.DEFAULT);
             } else if (key == 'center-display'){
                 let item = new Gtk.CheckButton({label: _('Display in the Middle')})
-                //item.set_active(Schema.get_boolean(key))
                 this.items.push(item)
                 this.hbox1.add(item)
  				Settings.bind(key, item, 'active', Gio.SettingsBindFlags.DEFAULT);		
             } else if (key == 'move-clock'){
                 let item = new Gtk.CheckButton({label:_('Move the clock')})
-                //item.set_active(Schema.get_boolean(key))
                 this.items.push(item)
                 this.hbox1.add(item)
                 Settings.bind(key, item, 'active', Gio.SettingsBindFlags.DEFAULT);
