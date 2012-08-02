@@ -9,10 +9,15 @@
     padding: 0 2px 0 5px;
 }
 
-.sm-unit-label {
+.sm-unit-label,
+.sm-net-unit-label {
     color: #aaa;
     font-size: 8px;
     padding: 6px 5px 0 2px;
+}
+
+.sm-net-unit-label {
+    min-width: 25px; 
 }
 
 .sm-perc-label {
@@ -35,6 +40,11 @@
 .sm-big-status-value {
     min-width: 32px;
     text-align: right;
+}
+
+.sm-net-status-value {
+    min-width: 40px;
+    text-align: center;
 }
 
 .sm-value {
